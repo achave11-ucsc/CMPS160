@@ -1,0 +1,10 @@
+useful link : 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/prototype'
+
+second link : 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript'
+
+TODO: Read the pixel to identify which object is being clicked
+      Lighting objects need to be present
+      Apply smooth/flat shading tuggle button
+      Implement defuse lighting based on object normals
+      Implement transformation matrix, that is translation, rotation, scaling
+      
