@@ -14,7 +14,8 @@ var points = []; //Stores points clicked
 
 var originalCoords = []; //Stores points clicked in (x,y,z) format
 
-var yellowOn; // Boolean for yellow cube
+var masterYellow; // Boolean for yellow cube
+var YCube;
 var redOn; // Boolean for red line
 
 

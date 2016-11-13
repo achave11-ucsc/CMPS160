@@ -38,6 +38,7 @@ function changeProjection(ev){
     for(var i = 0; i < listOfObjects.length; i ++){
  		listOfObjects[i].renderColor();
     }
+    YCube = new yellowCube(gl);
   }
   else if(orthoproj){
   	console.log("Ortho was on, now is off!");
@@ -47,9 +48,8 @@ function changeProjection(ev){
 	//var mvpMatrix = new Matrix4();   // Model view projection matrix
 
 	// Calculate the model, view and projection matrices
-	modelMatrix.setTranslate(0.0, 0.0, 0);
+	modelMatrix.setTranslate(0.0, 0.0, 0.0);
 	viewMatrix.setLookAt(0, 0, 4.5, 0, 0, -50, 0, 1, 3); 
-	console.log(canvas.width, canvas.height);
 	projMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
 	// Calculate the model view projection matrix
 	mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
@@ -57,8 +57,10 @@ function changeProjection(ev){
 	gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 
     orthoproj = false;
+    
  	for(var i = 0; i < listOfObjects.length; i ++){
  		listOfObjects[i].renderColor();
     }
+	YCube = new yellowCube(gl);
   }
 }

@@ -376,79 +376,7 @@ function drawSOR(gl, vertices, indexes, culors){
   }
 }*/
 
-//Yellow Cube drawing function
-/*function yellowCube(gl, bool){
-  if (bool){
-    var verticesColors = new Float32Array([
-    // Vertex coordinates and color
-      25.0,  500.0,  25.0,     1.0,  1.0,  0.0,  // v0 Yellow
-      -25.0,  500.0,  25.0,     1.0,  1.0,  0.0,  // v1 Yellow
-      -25.0, 475.0,  25.0,     1.0,  1.0,  0.0,  // v2 Yellow
-      25.0, 475.0,  25.0,     1.0,  1.0,  0.0,  // v3 Yellow
 
-      25.0,  475.0, -25.0,     1.0,  1.0,  0.0,  // v4 Yellow
-      25.0,  500.0, -25.0,     1.0,  1.0,  0.0,  // v5 Yellow
-      -25.0, 500.0, -25.0,     1.0,  1.0,  0.0,  // v6 Yellow
-      -25.0, 475.0, -25.0,     1.0,  1.0,  0.0  // v7 Yellow
-    ]);
-  }
-  else{
-    var verticesColors = new Float32Array([
-    // Vertex coordinates and color
-      25.0,  500.0,  25.0,     .50,  .50,  0.50,  // v0 Gray
-      -25.0,  500.0,  25.0,    .50,  .50,  0.50,  // v1 Gray
-      -25.0, 475.0,  25.0,     .50,  .50,  0.50,  // v2 Gray
-      25.0, 475.0,  25.0,      .50,  .50,  0.50,  // v3 Gray
-
-      25.0,  475.0, -25.0,    .50,  .50,  0.50,  // v4 Gray
-      25.0,  500.0, -25.0,    .50,  .50,  0.50,  // v5 Gray
-      -25.0, 500.0, -25.0,    .50,  .50,  0.50,  // v6 Gray
-      -25.0, 475.0, -25.0,    .50,  .50,  0.50  // v7 Gray
-    ]);
-  }
-    // Indices of the vertices
-  var indices = new Uint8Array([
-    0, 1, 2,   0, 2, 3,    // front
-    0, 3, 4,   0, 4, 5,    // right
-    0, 5, 6,   0, 6, 1,    // up
-    1, 6, 7,   1, 7, 2,    // left
-    7, 4, 3,   7, 3, 2,    // down
-    4, 7, 6,   4, 6, 5     // back
-  ]);
-  // Create a buffer object
-  var vertexColorBuffer = gl.createBuffer();
-  var indexBuffer = gl.createBuffer();
-  if (!vertexColorBuffer || !indexBuffer) {
-    return -1;
-  }
-  // Write the vertex coordinates and color to the buffer object
-  gl.bindBuffer(gl.ARRAY_BUFFER, vertexColorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, verticesColors, gl.STATIC_DRAW);
-
-  var FSIZE = verticesColors.BYTES_PER_ELEMENT;
-  // Assign the buffer object to a_Position and enable the assignment
-  var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
-  if(a_Position < 0) {
-    console.log('Failed to get the storage location of a_Position');
-    return -1;
-  }
-  gl.vertexAttribPointer(a_Position, 3, gl.FLOAT, false, FSIZE * 6, 0);
-  gl.enableVertexAttribArray(a_Position);
-  //Assign the buffer object to a_Color and enable the assignment
-  var a_Color = gl.getAttribLocation(gl.program, 'a_Color');
-  if(a_Color < 0) {
-    console.log('Failed to get the storage location of a_Color');
-    return -1;
-  }
-  gl.vertexAttribPointer(a_Color, 3, gl.FLOAT, false, FSIZE * 6, FSIZE * 3);
-  gl.enableVertexAttribArray(a_Color);
-
-  // Write the indices to the buffer object
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
-
-  return indices.length;
-}*/
 
 /*
 // Red Line drawing function

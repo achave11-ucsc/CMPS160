@@ -3,6 +3,7 @@ function createSOR(){
 }
 
 function lClick(ev){
+	var rect = ev.target.getBoundingClientRect() ; 
 	if(/*!createS*/false){
 		createSOR();
 		//alert("Please press button 'Create SOR'");	
@@ -10,7 +11,7 @@ function lClick(ev){
 	else if(!endRightClick /*&& createS*/){
 		var x = ev.clientX; // x coordinate of a mouse pointer
 		var y = ev.clientY; // y coordinate of a mouse pointer
-  		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
+  		//var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
 	
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
@@ -19,13 +20,16 @@ function lClick(ev){
 		originalCoords.push(coords);
 
 		points.push(x, y);
-	
+		
 		if (points.length > 2 ){
 			drawPoints();		
 		}
 	}
 	else{
-		console.log("Clicking has ended!");
+		console.log("Chainging View Point!");
+		var pixels = new Uint8Array(4);
+		gl.readPixels(ev.clientX - 13, canvas.height - ev.clientY+ 15, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+		console.log( ev.clientX-13, canvas.height- ev.clientY+15 ,  pixels);
 	}
 }	
 
@@ -54,10 +58,9 @@ function rClick(ev){
 		var drawnObject = new SORObject(vertices, indexes, [0.0, 1.0, 0.0]);
 		listOfObjects.push(drawnObject);
 		drawnObject.calculateVNormals()
-			
-	}
-	else{
-	console.log("Clicking has ended!");
+		masterYellow = true;
+		YCube = new yellowCube(gl);
+		
 	}
 }
 function mouseMove(ev){
@@ -78,7 +81,7 @@ function mouseMove(ev){
 		
 		var rubber = [tempX, tempY, x, y];
 		
-    		
+    	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
 		var n = bindBuffer(gl, rubber, 2);
     		gl.drawArrays(gl.LINES, 0, n);
 	

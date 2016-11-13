@@ -28,6 +28,7 @@ function bindBuffer(gl, PairOfPoints, lenOfVer) {
 //Draws the line segment that was created by the clicks registered
 function drawPoints(){
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
+	
 	gl.clearColor(1.0, 1.0, 1.0, 1.0);
 	var len = points.length;
 	var n = bindBuffer(gl, points, len/2);
