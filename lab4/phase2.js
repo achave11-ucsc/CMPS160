@@ -31,7 +31,8 @@ function drawSOR(gl, vertices, indexes, culors){
 function changeProjection(ev){
   if(!orthoproj){
   	console.log("Ortho was off, now is one!");
-    mvpMatrix.setOrtho(-500, 500, -500, 500, -500, 500);
+  	mvpMatrix.lookAt(0, 0, 0, 0, 0, 0, 0, 1, 0);
+    mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1);
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
     orthoproj = true;
     for(var i = 0; i < listOfObjects.length; i ++){
@@ -40,8 +41,21 @@ function changeProjection(ev){
   }
   else if(orthoproj){
   	console.log("Ortho was on, now is off!");
-    mvpMatrix.lookAt(-3, 10, 10, 0, 0, 0, 0, 1, 0);
-    gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
+    var modelMatrix = new Matrix4(); // Model matrix
+	var viewMatrix = new Matrix4();  // View matrix
+	var projMatrix = new Matrix4();  // Projection matrix
+	//var mvpMatrix = new Matrix4();   // Model view projection matrix
+
+	// Calculate the model, view and projection matrices
+	modelMatrix.setTranslate(0.0, 0.0, 0);
+	viewMatrix.setLookAt(0, 0, 4.5, 0, 0, -50, 0, 1, 3); 
+	console.log(canvas.width, canvas.height);
+	projMatrix.setPerspective(30, canvas.width/canvas.height, 1, 100);
+	// Calculate the model view projection matrix
+	mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
+	// Pass the model view projection matrix to u_MvpMatrix
+	gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
+
     orthoproj = false;
  	for(var i = 0; i < listOfObjects.length; i ++){
  		listOfObjects[i].renderColor();

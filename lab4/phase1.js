@@ -12,8 +12,8 @@ function lClick(ev){
 		var y = ev.clientY; // y coordinate of a mouse pointer
   		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
 	
-		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2)* 500;
-  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2)* 500;
+		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
+  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
 		
 		var coords = new xyzValues(x, y, 0);
 		originalCoords.push(coords);
@@ -38,8 +38,8 @@ function rClick(ev){
 		var y = ev.clientY; // y coordinate of a mouse pointer
   		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
 		
-		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2) * 500;
-  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2)* 500;		
+		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
+  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);		
 		
 		var coords = new xyzValues(x, y, 0);
 		originalCoords.push(coords);		
@@ -73,8 +73,8 @@ function mouseMove(ev){
 		var y = ev.clientY; // y coordinate of a mouse pointer
 		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
 		
-		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2)* 500;
-  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2)* 500;
+		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
+  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
 		
 		var rubber = [tempX, tempY, x, y];
 		

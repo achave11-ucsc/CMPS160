@@ -33,7 +33,7 @@ function main() {
 	// Set the eye point and the viewing volume
 	mvpMatrix = new Matrix4();
 	//mvpMatrix.setPerspective(30, 1, 1, 100);
-	mvpMatrix.setOrtho(-500, 500, -500, 500, -500, 500); // USE THIS FUNCTION FOR IN GENERAL 4 VIEWING
+	mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1); // USE THIS FUNCTION FOR IN GENERAL 4 VIEWING
 
 	gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 
