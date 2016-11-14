@@ -27,7 +27,7 @@ function bindBuffer(gl, PairOfPoints, lenOfVer) {
 }
 //Draws the line segment that was created by the clicks registered
 function drawPoints(){
-	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
+	//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
 	
 	gl.clearColor(1.0, 1.0, 1.0, 1.0);
 	var len = points.length;
@@ -55,4 +55,7 @@ function initArrayBuffer(gl, data, num, type, attribute) {
 	// Enable the assignment of the buffer object to the attribute variable
 	gl.enableVertexAttribArray(a_attribute);
 	return true;
+}
+function loadSor(){
+	alert("Please Create an SOR this functionality is not implemented");
 }

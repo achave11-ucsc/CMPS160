@@ -34,7 +34,9 @@ function main() {
 	mvpMatrix = new Matrix4();
 	//mvpMatrix.setPerspective(30, 1, 1, 100);
 	mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1); // USE THIS FUNCTION FOR IN GENERAL 4 VIEWING
-
+	
+	defFOV = 30;	
+	
 	gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 
 	gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
