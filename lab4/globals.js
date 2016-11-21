@@ -11,6 +11,21 @@ var oldY = 0.0;
 var camlClick;
 var inNOut= 0.0;
 var inNOutBool;
+var transformObjectXYZ;
+var transformationDone;
+
+var Rangex;
+var Rangey;
+
+var ortPangX = 0.0;
+var ortPangY = 0.0;
+var ortInNOut = 0.0;
+var ortOldX = 0.0;
+var ortOldY = 0.0;
+var ortInNOutBool;
+
+var objectCounter = 250;
+var loadObject =0 ;
 
 var listOfObjects = [];
 

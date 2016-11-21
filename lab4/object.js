@@ -7,10 +7,28 @@ function SORObject(Vertices, Indexes, Color){
 		verts.push(xyzComp);	
 	}
 	
+	// Get the storage location of u_MvpMatrix
+	this.u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
+	if (!this.u_MvpMatrix) {
+		console.log('Failed to get the storage location of u_MvpMatrix');
+		return;
+	}
+	
+	this.mvpMatrix = new Matrix4();   // Model view projection matrix
+	
+	
 	this.color = [];
+	
 	this.vertices = verts ;
 	this.indexes = Indexes ;
 	this.objColor = Color ;
+	this.ver ;
+	
+	this.transX;
+	this.transY;
+	this.translation = new xyzValues(0, 0, 0);;
+	this.rotatuon ;
+	this.scaling ;
 }
 
 SORObject.prototype.calculateVNormals = function(){	
@@ -90,15 +108,21 @@ SORObject.prototype.renderColor = function(){
 
 	for(var k = 0; k < clen; k ++){
 		var faceColor = colorPoly(this.objColor, [1.0, 1.0, 1.0] , this.normals[k], [1.0, 1.0, 1.0]);
-		this.color.push(faceColor[0], faceColor[1], faceColor[2]);
+		this.color.push(faceColor[0], faceColor[1], faceColor[2], (objectCounter/255));
 	}
-	
+	this.grey = [];
+	for(var i = 0 ; i < this.color.length; i += 3){
+		this.grey.push(0.5, 0.5, 0.5, objectCounter/255);
+		
+	}
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
 	var vlen = this.vertices.length;
 	var ver = [];
 	for(var i = 0; i < vlen; i ++){
 		ver.push(this.vertices[i].x, this.vertices[i].y, this.vertices[i].z);
 	}
+	this.ver = ver.slice(0) ;
+	
 	var n = drawSOR(gl, ver, this.indexes, this.color);
 	// Clear color and depth buffer
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -107,6 +131,31 @@ SORObject.prototype.renderColor = function(){
 
 	gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, 0);
 }
+
+SORObject.prototype.transformObject = function(deltaX, deltaY){
+		
+		var n = drawSOR(gl, this.ver, this.indexes, this.grey);
+		
+		if(transformationDone == true){
+			console.log("Translating!");
+			this.translation.x = deltaX/500 - this.transX/500 ;
+			this.translation.y = deltaY/500 - this.transY/500 ;
+			console.log(this.translation.x, this.translation.y);
+			
+			this.mvpMatrix.setTranslate(this.translation.x , this.translation.y, 0);
+
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+			gl.enable(gl.DEPTH_TEST);	
+	
+			var n = drawSOR(gl, this.ver, this.indexes, this.grey);
+			// Pass the model view projection matrix to u_MvpMatrix
+			gl.uniformMatrix4fv(this.u_MvpMatrix, false, this.mvpMatrix.elements);
+		}
+
+		gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, 0);
+}
+
 
 //Yellow Cube drawing function
 function yellowCube(gl){

@@ -5,8 +5,8 @@
 		<title>SOR</title>
 	</head>
 	<body onload="main()">
-		<canvas style= "border:3px solid black" id="webgl" width="500" height="500" onclick="lClick(event)" 
-		oncontextmenu="rClick(event)" onmousemove="mouseMove(event)" onmousedown="mouseDown(event)" onwheel="Zoom(event)" >
+		<canvas style= "border:3px solid black" id="webgl" width="600" height="600" onclick="lClick(event)" 
+		oncontextmenu="rClick(event)" onmousemove="mouseMove(event)" onmousedown="mouseDown(event)" onwheel="Zoom(event)" onmouseup="mouseup(event)" >
 <!--onmousedown="mouseDown(event)" onmousemove="mouseMove(event)"-->
 		<div onscroll="Zoom(event)"></div>
 		Please use a browser that supports "canvas"
@@ -14,7 +14,7 @@
 		<span>
     		<div style="color:white;padding:1px;width:145px;height:120px">
 				<button onclick="changeProjection()" type="button">Change Projection</button>
-				<button onclick="flatShade()" type="button">Change Shade</button>
+				<!--<button onclick="flatShade()" type="button">Change Shade</button>-->
 				<button onclick="loadSor()" type="button">Load SOR</button>
 				<button onclick="createSOR()" type="button">Create SOR</button>
 			</div>

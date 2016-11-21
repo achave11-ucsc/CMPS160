@@ -57,5 +57,8 @@ function initArrayBuffer(gl, data, num, type, attribute) {
 	return true;
 }
 function loadSor(){
-	alert("Please Create an SOR this functionality is not implemented");
+	if(createS == true){
+		objectCounter -= 5 ;
+	}
+	alert(objectCounter);
 }

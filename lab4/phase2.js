@@ -17,7 +17,7 @@ function drawSOR(gl, vertices, indexes, culors){
   if (!initArrayBuffer(gl, vertices, 3, gl.FLOAT, 'a_Position'))
     return -1;
 
-  if (!initArrayBuffer(gl, colors, 3, gl.FLOAT, 'a_Color'))
+  if (!initArrayBuffer(gl, colors, 4, gl.FLOAT, 'a_Color'))
     return -1;
 
   // Write the indices to the buffer object
@@ -34,13 +34,11 @@ function changeProjection(ev){
 	var viewMatrix = new Matrix4();  // View matrix
 	var projMatrix = new Matrix4();  // Projection matrix
   	// Calculate the model, view and projection matrices
-	modelMatrix.setTranslate(0, 0, inNOut);
+	//modelMatrix.setTranslate(0, 0, 0);
 	
-  	viewMatrix.setLookAt(PangX, PangY, 0, 0, 0, 0, 0, 1, 0);
-    
-    projMatrix.setOrtho(-1, 1, -1, 1, -1, 1);
-    mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
-    
+  	mvpMatrix.setLookAt(0, 0, 0, 0, 0, 0, 0, 1, 0);
+	mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1); 
+	
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
     orthoproj = true;
     for(var i = 0; i < listOfObjects.length; i ++){
@@ -49,7 +47,6 @@ function changeProjection(ev){
     YCube = new yellowCube(gl);
   }
   else if(orthoproj){
-  	console.log("Ortho was on, now is off!");
     var modelMatrix = new Matrix4(); // Model matrix
 	var viewMatrix = new Matrix4();  // View matrix
 	var projMatrix = new Matrix4();  // Projection matrix

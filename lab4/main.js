@@ -1,6 +1,8 @@
 function main() {
 	// Retrieve <canvas> element
 	canvas = document.getElementById('webgl');
+	Rangex = document.getElementById('myRangeX');
+  	Rangey = document.getElementById('myRangeY');
 	// Get the rendering context for WebGL
 	gl =  WebGLUtils.setupWebGL(canvas,{preserveDrawingBuffer: true})
 	if (!gl) {
