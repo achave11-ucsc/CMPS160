@@ -4,53 +4,53 @@ function createSOR(){
 
 function lClick(ev){
 	createS = true;
-	var rect = ev.target.getBoundingClientRect() ; 
+	var rect = ev.target.getBoundingClientRect() ;
 	if(!createS){
-		alert("Please press button 'Create SOR'");	
+		alert("Please press button 'Create SOR'");
 	}
 	else if(!endRightClick && createS){
 		var x = ev.clientX; // x coordinate of a mouse pointer
 		var y = ev.clientY; // y coordinate of a mouse pointer
   		//var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-	
+
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-		
+
 		var coords = new xyzValues(x, y, 0);
 		originalCoords.push(coords);
 
 		points.push(x, y);
-		
+
 		if (points.length > 2 ){
-			drawPoints();		
+			drawPoints();
 		}
 	}
 	else{
-		
+
 		check(ev);
-	
+
 	}
-}	
+}
 
 
 function rClick(ev){
 	ev.preventDefault();
-	
-	if(!endRightClick){	
+
+	if(!endRightClick){
 		var x = ev.clientX; // x coordinate of a mouse pointer
 		var y = ev.clientY; // y coordinate of a mouse pointer
   		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-		
+
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
-  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);		
-		
+  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
+
 		var coords = new xyzValues(x, y, 0);
-		originalCoords.push(coords);		
-	
-		endRightClick = true; 	
+		originalCoords.push(coords);
+
+		endRightClick = true;
 		points.push(x, y);
 		if (points.length > 2 ){
-			drawPoints();		
+			drawPoints();
 		}
 		SORGenerator();
 		calcVertices();
@@ -58,7 +58,7 @@ function rClick(ev){
 		listOfObjects.push(drawnObject);
 		drawnObject.calculateVNormals()
 		masterYellow = true;
-		YCube = new yellowCube(gl);	
+		YCube = new yellowCube(gl);
 	}
 	else{
 		if(!camlClick && clickedBG){
@@ -74,19 +74,19 @@ function rClick(ev){
 function mouseMove(ev){
 	if (points.length > 2 && !endRightClick){
 		drawPoints();
-	}	
+	}
 	if(!endRightClick && points.length > 1){
-		var ptsLen = points.length;		
+		var ptsLen = points.length;
 		var tempX = points[ptsLen-2];
 		var tempY = points[ptsLen-1];
-		
+
 		var x = ev.clientX; // x coordinate of a mouse pointer
 		var y = ev.clientY; // y coordinate of a mouse pointer
 		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-		
+
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-		
+
 		var rubber = [tempX, tempY, x, y];
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
 		var n = bindBuffer(gl, rubber, 2);
@@ -98,12 +98,12 @@ function mouseMove(ev){
 	else if(clickedBG && endRightClick && !orthoproj && !camlClick){
 		var x = ev.clientX;
 		var y = ev.clientY;
-		
+
 		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-		
+
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-		
+
 		var dx = x - oldX;
 		var dy = y - oldY;
 		if(Math.abs(dy) < Math.abs(dx)){
@@ -123,7 +123,7 @@ function mouseMove(ev){
 			}
 		}
 		oldX = x;
-		oldY = y; 
+		oldY = y;
 		var modelMatrix = new Matrix4(); // Model matrix
 		var viewMatrix = new Matrix4();  // View matrix
 		var projMatrix = new Matrix4();  // Projection matrix
@@ -132,13 +132,13 @@ function mouseMove(ev){
 		// Calculate the model, view and projection matrices
 		modelMatrix.setTranslate(0, 0, inNOut);
 
-		viewMatrix.setLookAt(PangX, PangY, 4.5, 0, 0, -50, 0, 1, 3); 
+		viewMatrix.setLookAt(PangX, PangY, 4.5, 0, 0, -50, 0, 1, 3);
 		projMatrix.setPerspective(defFOV, canvas.width/canvas.height, 1, 100);
 		// Calculate the model view projection matrix
 		mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
 		// Pass the model view projection matrix to u_MvpMatrix
 		gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-		
+
 	 	for(var i = 0; i < listOfObjects.length; i ++){
 	 		listOfObjects[i].renderColor();
 		}
@@ -147,12 +147,12 @@ function mouseMove(ev){
 	else if (clickedBG && endRightClick && orthoproj && !camlClick){
 		var x = ev.clientX;
 		var y = ev.clientY;
-		
+
 		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-		
+
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-		
+
 		var dx = x - ortOldX;
 		var dy = y - ortOldY;
 		if(Math.abs(dy) < Math.abs(dx)){
@@ -172,16 +172,14 @@ function mouseMove(ev){
 			}
 		}
 		ortOldX = x;
-		ortOldY = y; 
-		
-		console.log(x, y);	
-		
-		mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1); 
+		ortOldY = y;
+
+		mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1);
 		mvpMatrix.setTranslate(-ortPangX, -ortPangY, -1+ortInNOut);
-		
+
 		gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-		
-		
+
+
 		orthoproj = true;
 		for(var i = 0; i < listOfObjects.length; i ++){
 	 		listOfObjects[i].renderColor();
@@ -193,7 +191,7 @@ function mouseMove(ev){
 function Zoom(ev){
 	ev.preventDefault();
 	if(clickedBG && endRightClick && !orthoproj && !camlClick){
-		
+
 		var modelMatrix = new Matrix4(); // Model matrix
 		var viewMatrix = new Matrix4();  // View matrix
 		var projMatrix = new Matrix4();  // Projection matrix
@@ -201,14 +199,14 @@ function Zoom(ev){
 
 		// Calculate the model, view and projection matrices
 		modelMatrix.setTranslate(0, 0, inNOut);
-		viewMatrix.setLookAt(PangX, PangY, 4.5, 0, 0, -50, 0, 1, 3); 
+		viewMatrix.setLookAt(PangX, PangY, 4.5, 0, 0, -50, 0, 1, 3);
 		projMatrix.setPerspective(defFOV + ev.deltaY, canvas.width/canvas.height, 1, 100);
 		defFOV = defFOV + ev.deltaY;
 		// Calculate the model view projection matrix
 		mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
 		// Pass the model view projection matrix to u_MvpMatrix
 		gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-		
+
 	 	for(var i = 0; i < listOfObjects.length; i ++){
 	 		listOfObjects[i].renderColor();
 		}
@@ -222,13 +220,13 @@ function Zoom(ev){
 		inNOut +=  ev.deltaY;
 		// Calculate the model, view and projection matrices
 		modelMatrix.setTranslate(0, 0, inNOut);
-		viewMatrix.setLookAt(PangX, PangX, 4.5, 0, 0, -50, 0, 1, 3); 
+		viewMatrix.setLookAt(PangX, PangX, 4.5, 0, 0, -50, 0, 1, 3);
 		projMatrix.setPerspective(defFOV, canvas.width/canvas.height, 1, 100);
 		// Calculate the model view projection matrix
 		mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
 		// Pass the model view projection matrix to u_MvpMatrix
 		gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-		
+
 	 	for(var i = 0; i < listOfObjects.length; i ++){
 	 		listOfObjects[i].renderColor();
 		}
@@ -236,21 +234,21 @@ function Zoom(ev){
 	}
 	else if(clickedBG && endRightClick && orthoproj && ortInNOutBool && !camlClick){
 		ortInNOut += ev.deltaY/30;
-		mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1); 
+		mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1);
 		mvpMatrix.setTranslate(-ortPangX, -ortPangY, -1 + ortInNOut);
-		
+
 		gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
-		
+
 		for(var i = 0; i < listOfObjects.length; i ++){
 	 		listOfObjects[i].renderColor();
 		}
 		YCube = new yellowCube(gl);
 	}
-	
+
 }
 
 function check(ev){
-	
+
 	var pixels = new Uint8Array(4);
 	gl.readPixels(ev.clientX - 13, canvas.height - ev.clientY+ 15, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 	if(endRightClick == true){
@@ -261,12 +259,12 @@ function check(ev){
 			}
 	}
 	if(pixels[3] == 250){
-		console.log("Congrats object1 was selected")
+		console.log(" object1 was selected")
 	}
 }
 
 function mouseDown(ev){
-	
+
 	var pixels = new Uint8Array(4);
 	gl.readPixels(ev.clientX - 13, canvas.height - ev.clientY+ 15, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
 	if(ev.which == 2 && clickedBG && !orthoproj){
@@ -275,8 +273,8 @@ function mouseDown(ev){
 		}
 		else{
 			inNOutBool = false;
-		}	
-	}	
+		}
+	}
 	else if (ev.which ==2 && clickedBG && orthoproj){
 		if(!ortInNOutBool){
 			ortInNOutBool = true;
@@ -289,16 +287,16 @@ function mouseDown(ev){
 		var x = ev.clientX;
 		var y = ev.clientY;
 		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-		
+
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-		
+
 		listOfObjects[0].transX = x;
 		listOfObjects[0].transY = y;
-		 
+
 		transformObjectXYZ = true;
 		transformationDone = false;
-		
+
 		listOfObjects[0].transformObject(x, y);
 	}
 }
@@ -306,26 +304,16 @@ function mouseup(ev){
 	if(transformObjectXYZ == true && transformationDone == false){
 		var x = ev.clientX;
 		var y = ev.clientY;
-		
+
 		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-		
+
 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-		
+
 		transformationDone = true;
-		
+
 		listOfObjects[0].transformObject(x, y);
 		listOfObjects[0].transX = 0;
 		listOfObjects[0].transY = 0;
-	}	
+	}
 }
-
-
-
-
-
-
-
-
-
-

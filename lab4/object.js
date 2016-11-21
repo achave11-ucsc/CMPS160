@@ -1,29 +1,29 @@
 function SORObject(Vertices, Indexes, Color){
 	var verts = [];
 	for(var i = 0; i < Vertices.length; i += 3){
-		var xyzComp = new xyzValues(Vertices[i], 
+		var xyzComp = new xyzValues(Vertices[i],
 					Vertices[i+1],
 					Vertices[i+2]);
-		verts.push(xyzComp);	
+		verts.push(xyzComp);
 	}
-	
+
 	// Get the storage location of u_MvpMatrix
 	this.u_MvpMatrix = gl.getUniformLocation(gl.program, 'u_MvpMatrix');
 	if (!this.u_MvpMatrix) {
 		console.log('Failed to get the storage location of u_MvpMatrix');
 		return;
 	}
-	
+
 	this.mvpMatrix = new Matrix4();   // Model view projection matrix
-	
-	
+
+
 	this.color = [];
-	
+
 	this.vertices = verts ;
 	this.indexes = Indexes ;
 	this.objColor = Color ;
 	this.ver ;
-	
+
 	this.transX;
 	this.transY;
 	this.translation = new xyzValues(0, 0, 0);;
@@ -31,23 +31,23 @@ function SORObject(Vertices, Indexes, Color){
 	this.scaling ;
 }
 
-SORObject.prototype.calculateVNormals = function(){	
-		
-	var len = this.vertices.length; 
-	
+SORObject.prototype.calculateVNormals = function(){
+
+	var len = this.vertices.length;
+
 	var lvls = len/ 144 ;
-	
-	this.normals = [];	
+
+	this.normals = [];
 	for(var i = 0 ; i < len ; i += 4){
 		if(i == 0 ){
-			var normal1 = pointsToNormals(this.vertices[i+3], this.vertices[i],this.vertices[i+1] );	
+			var normal1 = pointsToNormals(this.vertices[i+3], this.vertices[i],this.vertices[i+1] );
 			var normal2 = pointsToNormals(this.vertices[i], this.vertices[i+1],this.vertices[i+2] );
 			var n_3_1 = pointsToNormals(this.vertices[i+1], this.vertices[i+2],this.vertices[i+3] );
 			var n_3_2 = pointsToNormals(this.vertices[i+4], this.vertices[i+5],this.vertices[i+6] );
-			
+
 			var n_4_1 = pointsToNormals(this.vertices[i], this.vertices[i+3], this.vertices[i+2] );
 			var n_4_2 = pointsToNormals(this.vertices[i+7], this.vertices[i+4],this.vertices[i+5] );
-			
+
 			var normal3 = [n_3_1[0]+n_3_2[0],n_3_1[1]+n_3_2[1], n_3_1[2]+n_3_2[2] ];
 			var normal4 = [n_4_1[0]+n_4_2[0],n_4_1[1]+n_4_2[1], n_4_1[2]+n_4_2[2] ];
 			this.normals.push(normal1, normal2, normal3, normal4);
@@ -55,49 +55,49 @@ SORObject.prototype.calculateVNormals = function(){
 		else if(i+4 == len){
 			var n_1_1 = this.normals[this.normals.length-2];
 			var n_1_2 = pointsToNormals(this.vertices[i+3], this.vertices[i], this.vertices[i+1]);
-			
+
 			var normal1 = [n_1_1[0]+n_1_2[0],n_1_1[1]+n_1_2[1], n_1_1[2]+n_1_2[2] ];
 			this.normals[this.normals.length-1] = normal1;
-			
+
 			var n_2_1 = this.normals[this.normals.length-2];
 			var n_2_2 = pointsToNormals(this.vertices[i], this.vertices[i+1], this.vertices[2]);
 			var normal2 = [n_2_1[0]+n_2_2[0],n_2_1[1]+n_2_2[1], n_2_1[2]+n_2_2[2] ];
 			this.normals[this.normals.length-2] = normal2;
-			
-			
+
+
 			var normal3 = pointsToNormals(this.vertices[i+1], this.vertices[i+2], this.vertices[i+3]);
-			
-			
+
+
 			var normal4 = pointsToNormals(this.vertices[i+2], this.vertices[i+3], this.vertices[i]);
-			
-					
+
+
 			this.normals.push(normal1, normal2, normal3, normal4);
-		
+
 		}
-		else{		
+		else{
 			//var normal1 = pointsToNormals(this.vertices[i+3], this.vertices[i], this.vertices[i+1]);
 			var n_1_1 = this.normals[this.normals.length-1];
 			var n_1_2 = pointsToNormals(this.vertices[i+3], this.vertices[i], this.vertices[i+1]);
 			var normal1 = [n_1_1[0]+n_1_2[0],n_1_1[1]+n_1_2[1], n_1_1[2]+n_1_2[2] ];
 			this.normals[this.normals.length-1] = normal1;
-			
+
 			//var normal2 = pointsToNormals(this.vertices[i], this.vertices[i+1], this.vertices[i+2]);
 			var n_2_1 = this.normals[this.normals.length-2];
 			var n_2_2 = pointsToNormals(this.vertices[i], this.vertices[i+1], this.vertices[i+2]);
 			var normal2 = [n_2_1[0]+n_2_2[0],n_2_1[1]+n_2_2[1], n_2_1[2]+n_2_2[2] ];
 			this.normals[this.normals.length-2] = normal2;
-			
+
 			var n_3_1 = pointsToNormals(this.vertices[i+1], this.vertices[i+2], this.vertices[i+3]) ;
 			var n_3_2 = pointsToNormals(this.vertices[i+4], this.vertices[i+5], this.vertices[i+6]) ;
 			var normal3 = [n_3_1[0]+n_3_2[0],n_3_1[1]+n_3_2[1], n_3_1[2]+n_3_2[2] ];
-			
+
 			var n_4_1 = pointsToNormals(this.vertices[i+2], this.vertices[i+3], this.vertices[i]) ;
 			var n_4_2 = pointsToNormals(this.vertices[i], this.vertices[i+4], this.vertices[i+6]);
 			var normal4 = [n_4_1[0]+n_4_2[0],n_4_1[1]+n_4_2[1], n_4_1[2]+n_4_2[2] ];
-			
+
 			this.normals.push(normal1, normal2, normal3, normal4);
 		}
-		
+
 	}
 	this.renderColor();
 	return(this.normals);
@@ -113,7 +113,7 @@ SORObject.prototype.renderColor = function(){
 	this.grey = [];
 	for(var i = 0 ; i < this.color.length; i += 3){
 		this.grey.push(0.5, 0.5, 0.5, objectCounter/255);
-		
+
 	}
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
 	var vlen = this.vertices.length;
@@ -122,33 +122,33 @@ SORObject.prototype.renderColor = function(){
 		ver.push(this.vertices[i].x, this.vertices[i].y, this.vertices[i].z);
 	}
 	this.ver = ver.slice(0) ;
-	
+
 	var n = drawSOR(gl, ver, this.indexes, this.color);
 	// Clear color and depth buffer
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-	gl.enable(gl.DEPTH_TEST);	
+	gl.enable(gl.DEPTH_TEST);
 
 	gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, 0);
 }
 
 SORObject.prototype.transformObject = function(deltaX, deltaY){
-		
+
 		var n = drawSOR(gl, this.ver, this.indexes, this.grey);
-		
+
 		if(transformationDone == true){
 			console.log("Translating!");
-			this.translation.x = deltaX/500 - this.transX/500 ;
-			this.translation.y = deltaY/500 - this.transY/500 ;
+			this.translation.x = deltaX - this.transX ;
+			this.translation.y = deltaY - this.transY ;
 			console.log(this.translation.x, this.translation.y);
-			
-			this.mvpMatrix.setTranslate(this.translation.x , this.translation.y, 0);
+
+			this.mvpMatrix.setTranslate(this.translation.x , this.translation.y, -1);
 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-			gl.enable(gl.DEPTH_TEST);	
-	
-			var n = drawSOR(gl, this.ver, this.indexes, this.grey);
+			gl.enable(gl.DEPTH_TEST);
+
+			var n = drawSOR(gl, this.ver, this.indexes, this.color);
 			// Pass the model view projection matrix to u_MvpMatrix
 			gl.uniformMatrix4fv(this.u_MvpMatrix, false, this.mvpMatrix.elements);
 		}
