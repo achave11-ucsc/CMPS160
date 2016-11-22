@@ -26,9 +26,21 @@ function lClick(ev){
 		}
 	}
 	else{
-
 		check(ev);
+		if(clickedBG == true && transformationDone == false && transformObjectXYZ == true ){
+			transformationDone = true;
+			transformObjectXYZ = false;
+			clickedBG = false;
+			var x = ev.clientX; // x coordinate of a mouse pointer
+			var y = ev.clientY; // y coordinate of a mouse pointer
+	  		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
 
+			x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
+	  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
+
+			
+			listOfObjects[0].transformObject(x, y);
+		}
 	}
 }
 
@@ -54,7 +66,7 @@ function rClick(ev){
 		}
 		SORGenerator();
 		calcVertices();
-		var drawnObject = new SORObject(vertices, indexes, [0.0, 1.0, 0.0]);
+		var drawnObject = new SORObject(vertices, indexes, [0.0, 1.0, 0.0, (objectCounter/255)]);
 		listOfObjects.push(drawnObject);
 		drawnObject.calculateVNormals()
 		masterYellow = true;
@@ -96,6 +108,7 @@ function mouseMove(ev){
     	}
 	}
 	else if(clickedBG && endRightClick && !orthoproj && !camlClick){
+		
 		var x = ev.clientX;
 		var y = ev.clientY;
 
@@ -144,7 +157,7 @@ function mouseMove(ev){
 		}
 		YCube = new yellowCube(gl);
 	}
-	else if (clickedBG && endRightClick && orthoproj && !camlClick){
+	else if (clickedBG && endRightClick && orthoproj && !camlClick ){
 		var x = ev.clientX;
 		var y = ev.clientY;
 
@@ -185,6 +198,22 @@ function mouseMove(ev){
 	 		listOfObjects[i].renderColor();
 		}
 		YCube = new yellowCube(gl);
+	}
+	else if ((transformObjectXYZ == true) && (transformationDone == false)){
+		var x = ev.clientX;
+		var y = ev.clientY;
+
+		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
+
+		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
+  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
+
+		//transformationDone = true;
+
+		listOfObjects[0].transformObject(x, y);
+		listOfObjects[0].transX = 0;
+		listOfObjects[0].transY = 0;
+	
 	}
 }
 
@@ -248,18 +277,21 @@ function Zoom(ev){
 }
 
 function check(ev){
-
 	var pixels = new Uint8Array(4);
 	gl.readPixels(ev.clientX - 13, canvas.height - ev.clientY+ 15, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+	
 	if(endRightClick == true){
-		if((ev.which == 1) && (pixels[0]==255) && (pixels[1]==255) && (pixels[2]==255) && (pixels[3]==255 )){
+		if(((pixels[0]+pixels[1]+pixels[2])/3 == 255 ) && (pixels[3]==255 ) ){
 			clickedBG = true;
 			camlClick = false;
 			console.log("Turning On Back Groud");
 			}
-	}
-	if(pixels[3] == 250){
-		console.log(" object1 was selected")
+		for(var i = 1; i < listOfObjects.length+1; i ++){
+ 			var objNo = listOfObjects[i].objColor[3];
+			if(pixels[3] == 255- i*5 ){
+				console.log(" object ", i," was selected");
+			}
+		}
 	}
 }
 
@@ -300,7 +332,7 @@ function mouseDown(ev){
 		listOfObjects[0].transformObject(x, y);
 	}
 }
-function mouseup(ev){
+/*function mouseup(ev){
 	if(transformObjectXYZ == true && transformationDone == false){
 		var x = ev.clientX;
 		var y = ev.clientY;
@@ -316,4 +348,4 @@ function mouseup(ev){
 		listOfObjects[0].transX = 0;
 		listOfObjects[0].transY = 0;
 	}
-}
+}*/

@@ -62,3 +62,23 @@ function loadSor(){
 	}
 	alert(objectCounter);
 }
+function getDeltaValues(oldX, oldY, newX, newY){
+	var dx = newX - oldX;
+	var dy = newY - oldY;
+	
+	if(dx < 0){
+		dx += -0.02/*Math.abs(dx)*/;
+	}
+	else{
+		dx += 0.02 /*Math.abs(dx)*/;
+	}
+
+	if(dy < 0){
+		dy += -0.02;
+	}
+	else{
+		dy += 0.02;
+	}
+	var res = [dx, dy];
+	return(res)
+}

@@ -13,6 +13,7 @@ function SORObject(Vertices, Indexes, Color){
 		console.log('Failed to get the storage location of u_MvpMatrix');
 		return;
 	}
+	this.objectId = objectCounter;
 
 	this.mvpMatrix = new Matrix4();   // Model view projection matrix
 
@@ -108,11 +109,11 @@ SORObject.prototype.renderColor = function(){
 
 	for(var k = 0; k < clen; k ++){
 		var faceColor = colorPoly(this.objColor, [1.0, 1.0, 1.0] , this.normals[k], [1.0, 1.0, 1.0]);
-		this.color.push(faceColor[0], faceColor[1], faceColor[2], (objectCounter/255));
+		this.color.push(faceColor[0], faceColor[1], faceColor[2], (objectId/255));
 	}
 	this.grey = [];
 	for(var i = 0 ; i < this.color.length; i += 3){
-		this.grey.push(0.5, 0.5, 0.5, objectCounter/255);
+		this.grey.push(0.5, 0.5, 0.5, objectId/255);
 
 	}
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
@@ -134,14 +135,18 @@ SORObject.prototype.renderColor = function(){
 
 SORObject.prototype.transformObject = function(deltaX, deltaY){
 
-		var n = drawSOR(gl, this.ver, this.indexes, this.grey);
+		//var n = drawSOR(gl, this.ver, this.indexes, this.grey);
 
 		if(transformationDone == true){
 			console.log("Translating!");
-			this.translation.x = deltaX - this.transX ;
-			this.translation.y = deltaY - this.transY ;
+			var deltVals = getDeltaValues(this.transX, this.transY, deltaX, deltaY);
+			this.translation.x = deltVals[0] ;
+			this.translation.y = deltVals[1] ;
 			console.log(this.translation.x, this.translation.y);
-
+			
+			this.transX = deltaX;			
+			this.transY = deltaY;
+			
 			this.mvpMatrix.setTranslate(this.translation.x , this.translation.y, -1);
 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -152,7 +157,25 @@ SORObject.prototype.transformObject = function(deltaX, deltaY){
 			// Pass the model view projection matrix to u_MvpMatrix
 			gl.uniformMatrix4fv(this.u_MvpMatrix, false, this.mvpMatrix.elements);
 		}
+		else if(transformationDone == false ){
+			var deltVals = getDeltaValues(this.transX, this.transY, deltaX, deltaY);
+			this.translation.x = deltVals[0] ;
+			this.translation.y = deltVals[1] ;
+	
+			this.transX = deltaX;			
+			this.transY = deltaY;
+			
+			this.mvpMatrix.setTranslate(this.translation.x , this.translation.y, -1);
 
+			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+			gl.enable(gl.DEPTH_TEST);
+
+			var n = drawSOR(gl, this.ver, this.indexes, this.grey);
+			// Pass the model view projection matrix to u_MvpMatrix
+			gl.uniformMatrix4fv(this.u_MvpMatrix, false, this.mvpMatrix.elements);
+		}
+		
 		gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, 0);
 }
 
