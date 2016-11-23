@@ -4,10 +4,12 @@ function createSOR(){
 
 function lClick(ev){
 	createS = true;
+	console.log("BackGround In lClick", clickedBG);
 	var rect = ev.target.getBoundingClientRect() ;
 	if(!createS){
 		alert("Please press button 'Create SOR'");
 	}
+
 	else if(!endRightClick && createS){
 		var x = ev.clientX; // x coordinate of a mouse pointer
 		var y = ev.clientY; // y coordinate of a mouse pointer
@@ -25,29 +27,30 @@ function lClick(ev){
 			drawPoints();
 		}
 	}
-	else{
-		check(ev);
-		if(clickedBG == true && transformationDone == false && transformObjectXYZ == true ){
-			transformationDone = true;
-			transformObjectXYZ = false;
-			clickedBG = false;
-			var x = ev.clientX; // x coordinate of a mouse pointer
-			var y = ev.clientY; // y coordinate of a mouse pointer
-	  		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
 
-			x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
-	  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-
-			
-			listOfObjects[0].transformObject(x, y);
-		}
-	}
+	// else{
+	// 	//check(ev);
+	// 	if(clickedBG == true && transformationDone == false && transformObjectXYZ == true ){
+	// 		transformationDone = true;
+	// 		transformObjectXYZ = false;
+	// 		clickedBG = false;
+	// 		var x = ev.clientX; // x coordinate of a mouse pointer
+	// 		var y = ev.clientY; // y coordinate of a mouse pointer
+	//   	var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
+	//
+	// 		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
+	//   	y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
+	//
+	// 		listOfObjects[0].transformObject(x, y);
+	// 	}
+	// }
+	// console.log("BackGround Out lClick", clickedBG);
 }
 
 
 function rClick(ev){
 	ev.preventDefault();
-
+	console.log("BackGround In rClick", clickedBG);
 	if(!endRightClick){
 		var x = ev.clientX; // x coordinate of a mouse pointer
 		var y = ev.clientY; // y coordinate of a mouse pointer
@@ -72,6 +75,7 @@ function rClick(ev){
 		masterYellow = true;
 		YCube = new yellowCube(gl);
 	}
+
 	else{
 		if(!camlClick && clickedBG){
 			camlClick = true;
@@ -81,12 +85,14 @@ function rClick(ev){
 			camlClick = false;
 		}
 	}
+	console.log("BackGround Out rClick", clickedBG);
 }
 
 function mouseMove(ev){
 	if (points.length > 2 && !endRightClick){
 		drawPoints();
 	}
+
 	if(!endRightClick && points.length > 1){
 		var ptsLen = points.length;
 		var tempX = points[ptsLen-2];
@@ -107,8 +113,9 @@ function mouseMove(ev){
     		drawPoints();
     	}
 	}
-	else if(clickedBG && endRightClick && !orthoproj && !camlClick){
-		
+
+	else if((clickedBG == true) && endRightClick && !orthoproj){
+
 		var x = ev.clientX;
 		var y = ev.clientY;
 
@@ -157,7 +164,8 @@ function mouseMove(ev){
 		}
 		YCube = new yellowCube(gl);
 	}
-	else if (clickedBG && endRightClick && orthoproj && !camlClick ){
+
+	else if ((clickedBG == true) && endRightClick && orthoproj ){
 		var x = ev.clientX;
 		var y = ev.clientY;
 
@@ -199,6 +207,7 @@ function mouseMove(ev){
 		}
 		YCube = new yellowCube(gl);
 	}
+
 	else if ((transformObjectXYZ == true) && (transformationDone == false)){
 		var x = ev.clientX;
 		var y = ev.clientY;
@@ -213,13 +222,14 @@ function mouseMove(ev){
 		listOfObjects[0].transformObject(x, y);
 		listOfObjects[0].transX = 0;
 		listOfObjects[0].transY = 0;
-	
+
 	}
 }
 
 function Zoom(ev){
+
 	ev.preventDefault();
-	if(clickedBG && endRightClick && !orthoproj && !camlClick){
+	if(endRightClick && !orthoproj){
 
 		var modelMatrix = new Matrix4(); // Model matrix
 		var viewMatrix = new Matrix4();  // View matrix
@@ -231,6 +241,12 @@ function Zoom(ev){
 		viewMatrix.setLookAt(PangX, PangY, 4.5, 0, 0, -50, 0, 1, 3);
 		projMatrix.setPerspective(defFOV + ev.deltaY, canvas.width/canvas.height, 1, 100);
 		defFOV = defFOV + ev.deltaY;
+		if(defFOV < 2 ){
+			defFOV = 1;
+		}
+		else if(defFOV > 180){
+			defFOV = 180;
+		}
 		// Calculate the model view projection matrix
 		mvpMatrix.set(projMatrix).multiply(viewMatrix).multiply(modelMatrix);
 		// Pass the model view projection matrix to u_MvpMatrix
@@ -241,7 +257,7 @@ function Zoom(ev){
 		}
 		YCube = new yellowCube(gl);
 	}
-	else if(clickedBG && endRightClick && !orthoproj && inNOutBool && !camlClick){
+	else if(endRightClick && !orthoproj && inNOutBool ){
 		var modelMatrix = new Matrix4(); // Model matrix
 		var viewMatrix = new Matrix4();  // View matrix
 		var projMatrix = new Matrix4();  // Projection matrix
@@ -261,7 +277,7 @@ function Zoom(ev){
 		}
 		YCube = new yellowCube(gl);
 	}
-	else if(clickedBG && endRightClick && orthoproj && ortInNOutBool && !camlClick){
+	else if(endRightClick && orthoproj && ortInNOutBool ){
 		ortInNOut += ev.deltaY/30;
 		mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1);
 		mvpMatrix.setTranslate(-ortPangX, -ortPangY, -1 + ortInNOut);
@@ -273,13 +289,14 @@ function Zoom(ev){
 		}
 		YCube = new yellowCube(gl);
 	}
-
+	console.log("BackGround Out Zoom", clickedBG);
 }
 
 function check(ev){
+	console.log("BackGround In Check", clickedBG);
 	var pixels = new Uint8Array(4);
 	gl.readPixels(ev.clientX - 13, canvas.height - ev.clientY+ 15, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-	
+
 	if(endRightClick == true){
 		if(((pixels[0]+pixels[1]+pixels[2])/3 == 255 ) && (pixels[3]==255 ) ){
 			clickedBG = true;
@@ -293,12 +310,14 @@ function check(ev){
 			}
 		}
 	}
+	console.log("BackGround Out Check", clickedBG);
 }
 
 function mouseDown(ev){
-
+	console.log("BackGround In mouseDown", clickedBG);
 	var pixels = new Uint8Array(4);
 	gl.readPixels(ev.clientX - 13, canvas.height - ev.clientY+ 15, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+
 	if(ev.which == 2 && clickedBG && !orthoproj){
 		if(!inNOutBool){
 			inNOutBool = true;
@@ -307,6 +326,7 @@ function mouseDown(ev){
 			inNOutBool = false;
 		}
 	}
+
 	else if (ev.which ==2 && clickedBG && orthoproj){
 		if(!ortInNOutBool){
 			ortInNOutBool = true;
@@ -315,7 +335,10 @@ function mouseDown(ev){
 		ortInNOutBool = false;
 		}
 	}
-	else if(ev.which == 1 && pixels[3] == 250 ){
+
+	else if(ev.which == 1 && clickedBG == false){
+		check(ev);
+
 		var x = ev.clientX;
 		var y = ev.clientY;
 		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
@@ -331,21 +354,12 @@ function mouseDown(ev){
 
 		listOfObjects[0].transformObject(x, y);
 	}
+	console.log("BackGround Out mouseDown", clickedBG);
 }
-/*function mouseup(ev){
-	if(transformObjectXYZ == true && transformationDone == false){
-		var x = ev.clientX;
-		var y = ev.clientY;
 
-		var rect = ev.target.getBoundingClientRect() ; //Normalize canvas
-
-		x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
-  		y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-
-		transformationDone = true;
-
-		listOfObjects[0].transformObject(x, y);
-		listOfObjects[0].transX = 0;
-		listOfObjects[0].transY = 0;
-	}
-}*/
+function mouseUp(ev){
+	console.log("BackGround In mouseUp", clickedBG);
+	 clickedBG = false;
+	 camlClick = false;
+	 console.log("BackGround Out mouseUp", clickedBG);
+}

@@ -24,7 +24,7 @@ var ortOldX = 0.0;
 var ortOldY = 0.0;
 var ortInNOutBool;
 
-var objectCounter = 250;
+var objectCounter = 254;
 var loadObject =0 ;
 
 var listOfObjects = [];
@@ -55,4 +55,3 @@ var flatNormal = []; // Array for face normals
 var flatShader; // Flat Shader Boolean
 var smoothShader = true; // Smooth Shader Boolean
 var vertexNormal = []; // Array for normals in each vertex
-

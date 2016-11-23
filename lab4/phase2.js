@@ -35,10 +35,10 @@ function changeProjection(ev){
 	var projMatrix = new Matrix4();  // Projection matrix
   	// Calculate the model, view and projection matrices
 	//modelMatrix.setTranslate(0, 0, 0);
-	
+
   	mvpMatrix.setLookAt(0, 0, 0, 0, 0, 0, 0, 1, 0);
-	mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1); 
-	
+	mvpMatrix.setOrtho(-1, 1, -1, 1, -1, 1);
+
     gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
     orthoproj = true;
     for(var i = 0; i < listOfObjects.length; i ++){
@@ -54,7 +54,7 @@ function changeProjection(ev){
 
 	// Calculate the model, view and projection matrices
 	modelMatrix.setTranslate(0, 0, inNOut);
-	viewMatrix.setLookAt(PangX, PangY, 4.5, 0, 0, -50, 0, 1, 3); 
+	viewMatrix.setLookAt(PangX, PangY, 4.5, 0, 0, -50, 0, 1, 3);
 	projMatrix.setPerspective(defFOV, canvas.width/canvas.height, 1, 100);
 
 	// Calculate the model view projection matrix
@@ -63,7 +63,7 @@ function changeProjection(ev){
 	gl.uniformMatrix4fv(u_MvpMatrix, false, mvpMatrix.elements);
 
     orthoproj = false;
-    
+
  	for(var i = 0; i < listOfObjects.length; i ++){
  		listOfObjects[i].renderColor();
     }

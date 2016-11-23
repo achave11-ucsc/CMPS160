@@ -25,10 +25,11 @@ function bindBuffer(gl, PairOfPoints, lenOfVer) {
 	gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 	return n;
 }
+
 //Draws the line segment that was created by the clicks registered
 function drawPoints(){
 	//gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
-	
+
 	gl.clearColor(1.0, 1.0, 1.0, 1.0);
 	var len = points.length;
 	var n = bindBuffer(gl, points, len/2);
@@ -56,16 +57,18 @@ function initArrayBuffer(gl, data, num, type, attribute) {
 	gl.enableVertexAttribArray(a_attribute);
 	return true;
 }
+
 function loadSor(){
 	if(createS == true){
 		objectCounter -= 5 ;
 	}
 	alert(objectCounter);
 }
+
 function getDeltaValues(oldX, oldY, newX, newY){
 	var dx = newX - oldX;
 	var dy = newY - oldY;
-	
+
 	if(dx < 0){
 		dx += -0.02/*Math.abs(dx)*/;
 	}

@@ -28,7 +28,7 @@ function SORObject(Vertices, Indexes, Color){
 	this.transX;
 	this.transY;
 	this.translation = new xyzValues(0, 0, 0);;
-	this.rotatuon ;
+	this.rotation ;
 	this.scaling ;
 }
 
@@ -109,11 +109,11 @@ SORObject.prototype.renderColor = function(){
 
 	for(var k = 0; k < clen; k ++){
 		var faceColor = colorPoly(this.objColor, [1.0, 1.0, 1.0] , this.normals[k], [1.0, 1.0, 1.0]);
-		this.color.push(faceColor[0], faceColor[1], faceColor[2], (objectId/255));
+		this.color.push(faceColor[0], faceColor[1], faceColor[2], (this.objectId/255));
 	}
 	this.grey = [];
 	for(var i = 0 ; i < this.color.length; i += 3){
-		this.grey.push(0.5, 0.5, 0.5, objectId/255);
+		this.grey.push(0.5, 0.5, 0.5, this.objectId/255);
 
 	}
 	gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER);
@@ -143,10 +143,10 @@ SORObject.prototype.transformObject = function(deltaX, deltaY){
 			this.translation.x = deltVals[0] ;
 			this.translation.y = deltVals[1] ;
 			console.log(this.translation.x, this.translation.y);
-			
-			this.transX = deltaX;			
+
+			this.transX = deltaX;
 			this.transY = deltaY;
-			
+
 			this.mvpMatrix.setTranslate(this.translation.x , this.translation.y, -1);
 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -161,10 +161,10 @@ SORObject.prototype.transformObject = function(deltaX, deltaY){
 			var deltVals = getDeltaValues(this.transX, this.transY, deltaX, deltaY);
 			this.translation.x = deltVals[0] ;
 			this.translation.y = deltVals[1] ;
-	
-			this.transX = deltaX;			
+
+			this.transX = deltaX;
 			this.transY = deltaY;
-			
+
 			this.mvpMatrix.setTranslate(this.translation.x , this.translation.y, -1);
 
 			gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -175,7 +175,7 @@ SORObject.prototype.transformObject = function(deltaX, deltaY){
 			// Pass the model view projection matrix to u_MvpMatrix
 			gl.uniformMatrix4fv(this.u_MvpMatrix, false, this.mvpMatrix.elements);
 		}
-		
+
 		gl.drawElements(gl.TRIANGLES, n, gl.UNSIGNED_SHORT, 0);
 }
 

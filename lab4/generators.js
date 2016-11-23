@@ -10,11 +10,11 @@ function SORGenerator(){
       			var x1 = coords_temp[j].x ;
       			var y1 = coords_temp[j].y ;
 			var z1 = coords_temp[j].z ;
-			
+
 			var x2 = x1*cosine(i) + z1* sine(i);
 			var y2 = y1 ;
       			var z2 = -x1*sine(i) + z1*cosine(i);
-      
+
 			var XYZ_i = new xyzValues(x2, y2, z2);
    	   		array_0.push(XYZ_i);
 		}
@@ -43,6 +43,7 @@ function calcVertices() {
 		}
 	}
 }
+
 //calculates the normals of a given SOR
 function pointsToNormals(Point1, Point2, Point3){
   var Vect1 = [Point1.x - Point2.x, Point1.y - Point2.y, Point1.z - Point2.z];
@@ -59,6 +60,7 @@ function pointsToNormals(Point1, Point2, Point3){
 
   return [x/mag, y/mag, z/mag];
 }
+
 // Function that colors the polygonal faces by point
 function colorPoly(ObjCol, LightColr , Normal, ColorVect ){
 

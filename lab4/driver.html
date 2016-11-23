@@ -5,8 +5,8 @@
 		<title>SOR</title>
 	</head>
 	<body onload="main()">
-		<canvas style= "border:3px solid black" id="webgl" width="600" height="600" onclick="lClick(event)" 
-		oncontextmenu="rClick(event)" onmousemove="mouseMove(event)" onmousedown="mouseDown(event)" onwheel="Zoom(event)" >
+		<canvas style= "border:3px solid black" id="webgl" width="600" height="600" onclick="lClick(event)"
+		oncontextmenu="rClick(event)" onmousemove="mouseMove(event)" onmousedown="mouseDown(event)" onwheel="Zoom(event)" onmouseup="mouseUp(event)" >
 <!--onmousedown="mouseDown(event)" onmousemove="mouseMove(event)"-->
 		<div onscroll="Zoom(event)"></div>
 		Please use a browser that supports "canvas"
@@ -24,12 +24,12 @@
 		<script src="../lib/cuon-utils.js"></script>
 		<script src="../lib/cuon-matrix.js"></script>
 		<script src="globals.js"></script>
-		<script src="object.js"></script>  
-		<script src="generators.js"></script>		
+		<script src="object.js"></script>
+		<script src="generators.js"></script>
 		<script src="phase1.js"></script>
 		<script src="phase2.js"></script>
 		<script src="shaders.js"></script>
-		<script src="helpers.js"></script>   
+		<script src="helpers.js"></script>
 		<script src="main.js"></script>
   	</body>
 </html>
